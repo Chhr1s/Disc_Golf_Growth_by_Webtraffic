@@ -32,7 +32,7 @@ library(glmertree)
 
 We've all heard that disc golf grew this year, but I haven't seen anyone try to quantify this yet. I'm going to generally refer to the growth of disc golf based on it's search popularity in [Google Trends](trends.google.com). This is an imperfect proxy for the overall growth of disc golf, but I am okay with that, and it's my only source of data for this project. \n
 
-Every time someone is looking for a disc, a nearby course, a YouTube tutorial, or a bit of Disc Golf Pro Tour coverage, they probably search for this on Google (or somethihng owned by Google, i.e., YouTube). \n
+Every time someone is looking for a disc, a nearby course, a YouTube tutorial, or a bit of Disc Golf Pro Tour coverage, they probably search for this on Google (or something owned by Google, i.e., YouTube). \n
 
 Here's what I hope to answer: 
 
