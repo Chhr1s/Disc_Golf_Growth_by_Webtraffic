@@ -254,12 +254,12 @@ plot(tree1, ask = F, which = 'tree')
 ```
 
 
-It looks like the first bit of growth was relatively small, but was significant. This was at year 2010. The window from 2004-2010 had an average of 41.26 of webtraffic, and we saw a significant (but modest) increase (of ~8%) to 49.10 in webtraffic from 2011-2019. These two windows together were significantly different than 2020, which had an average of 71.42! That's an increase of over 20% from the prior window (2011-2019) \n
+It looks like the first bit of growth was relatively small, but was significant. This was at year 2011. The window from 2004-2010 had an average of 41.26 of webtraffic, and we saw a significant (but modest) increase (of ~8%) to 49.10 in webtraffic from 2011-2019. These two windows together were significantly different than 2020, which had an average of 71.42! That's an increase of over 20% from the prior window (2011-2019) \n
 
 This shows no matter how the computer groups the years, there are only 2 significant increases in disc golf search popularity: before 2011 and after 2019. And the latter jump was __much__ larger.\n
 
 
-# Where is the USA is the Webtraffic Located?
+# Where (at least within the USA) is the Webtraffic Located?
 
 ```{r include=T, echo= F}
 dat_long <- dat %>% 
