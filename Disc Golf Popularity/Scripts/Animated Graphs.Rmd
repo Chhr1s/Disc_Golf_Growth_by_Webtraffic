@@ -79,6 +79,9 @@ anim <- plot_over_time +
 
 gif1 <- animate(anim, nframes = 100, end_pause = 15, rewind = T)
 gif1
+
+#anim_save("gif1.gif", gif1)
+
 ```
 
 
@@ -110,4 +113,5 @@ anim2 <- plot_over_month +
   
 gif2 <- animate(anim2, nframes = 100, end_pause = 15, rewind = T)
 gif2
+anim_save("gif2.gif", gif2)
 ```
