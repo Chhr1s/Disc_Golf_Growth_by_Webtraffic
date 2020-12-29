@@ -1,0 +1,113 @@
+---
+title: "Animated Graphs"
+author: "Christopher Loan"
+date: "12/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, 
+                      include = T, 
+                      message = F, 
+                      warning = F)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+library(lubridate)
+library(gganimate)
+```
+
+```{r include=FALSE}
+
+dat <- import(here("Data", "geoMap 2017.csv")) %>% 
+  left_join(import(here("Data", "geoMap 2018.csv")),
+            by = "Region") %>% 
+  left_join(import(here("Data", "geoMap 2019.csv")),
+            by = "Region") %>% 
+  left_join(import(here("Data", "geoMap 2020.csv")),
+            by = "Region") %>% 
+  mutate(Region = factor(Region)) %>% 
+  rename(`2017` = 'disc golf: (2017)',
+         `2018` = 'disc golf: (2018)',
+         `2019` = 'disc golf: (2019)',
+         `2020` = 'disc golf: (2020)')
+
+dat_trend <- 
+  import(here("Data", "Search DG Since 2004.csv")) %>% 
+  transmute(Date = ymd(parse_date_time(date, "ym")),
+            searches = searches, 
+            year = year(Date), 
+            month = month(Date))
+```
+
+```{r}
+plot_over_time <- 
+  dat_trend %>% 
+  group_by(year) %>% 
+  summarize(mean_yearly = mean(searches),
+            sd = sd(searches), 
+            se_yearly = sd/sqrt(n())) %>% 
+ ggplot(aes(x = year, 
+            y = mean_yearly,
+            ymin = mean_yearly-se_yearly,
+            ymax=mean_yearly+se_yearly,
+            ),
+        show.legend = F) + 
+  scale_x_continuous(breaks = 2004:2020) +
+  geom_point() + 
+  geom_errorbar() +
+  geom_line(aes(x = year, 
+                y = mean_yearly), 
+            show.legend = F) +
+  labs(title = 'Figure 1. Average Yearly Google Search Popularity of the Term `Disc Golf`',
+       subtitle = 'Error Bars Represent Standard Error. increases are significant only if they do not overlap',
+       y = 'Relative Search Popularity',
+       x = 'Year') +
+  ylim(ymin = 0, ymax = 100) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, vjust = 0, hjust=0))
+
+
+
+anim <- plot_over_time + 
+  transition_reveal(year) + 
+  geom_point(aes(group = seq_along(year)))
+
+gif1 <- animate(anim, nframes = 100, end_pause = 15, rewind = T)
+gif1
+```
+
+
+```{r}
+
+plot_over_month <- 
+  dat_trend %>% 
+ ggplot(aes(x = Date, 
+            y = searches
+            ),
+        show.legend = F) + 
+  geom_point(show.legend = F) +
+  geom_line(show.legend = F, color = 'cornflowerblue') +
+  labs(title = 'Figure 2. Google Search Popularity of the Term `Disc Golf`',
+       subtitle = 'Dotted line represents average search popularity from 2004-2020',
+       y = 'Relative Search Popularity',
+       x = 'Date') +
+  geom_hline(aes(yintercept = mean(searches)), 
+             color = 'coral3', 
+             linetype = 2, 
+             show.legend = F)+
+  ylim(ymin = 0, ymax = 100) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, vjust = 0, hjust=0))
+
+anim2 <- plot_over_month + 
+  transition_reveal(Date) + 
+  geom_point(aes(group = seq_along(Date))) 
+  
+gif2 <- animate(anim2, nframes = 100, end_pause = 15, rewind = T)
+gif2
+```
