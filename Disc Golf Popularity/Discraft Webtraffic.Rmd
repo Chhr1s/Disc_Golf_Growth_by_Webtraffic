@@ -1,0 +1,77 @@
+---
+title: "Discraft"
+author: "Christopher Loan"
+date: "12/29/2020"
+output: html_document
+---
+
+
+```{r}
+##### THIS IS TOTALLY UNFINISHED ... ## add "ultimate disc" + "disc golf" to this and compare impact on discraft webtraffic , also add older years to show increase over time
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, 
+                      include = T, 
+                      message = F, 
+                      warning = F)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rio)
+library(here)
+library(lubridate)
+library(knitr)
+library(glmertree)
+library(lavaan)
+```
+
+```{r}
+dat <- import(here("Data", "Discraft.csv")) %>% 
+  mutate(Date = ymd(Week), 
+         Month = month(Date),
+         Year = year(Date)) %>% 
+  rename(Discraft = 'discraft: (United States)',
+         PaulMcBeth = 'paul mcbeth: (United States)',
+         PaigePierce = 'paige pierce: (United States)',
+         PaulUlibarri = 'paul ulibarri: (United States)') %>% 
+  select(-Week)
+head(dat)
+
+```
+
+```{r}
+dat_long <- 
+  dat %>% 
+  pivot_longer(-c(Date, Month, Year, Discraft), 
+               names_to = 'search_term',
+               values_to = 'searches') %>% 
+  mutate(search_term = factor(search_term))
+```
+
+```{r}
+tree1 <- lmertree(Discraft ~ 1 | (1 | search_term) | Month + Year,
+        data = dat_long,
+        alpha = 0.05
+        )
+
+plot(tree1, which = 'all', ask = F)
+```
+
+```{r}
+mod1 <- 
+' 
+Switch =~ PaulMcBeth + PaigePierce + PaulUlibarri 
+  
+Discraft ~ Switch + Month + Year
+'
+
+fit1 <- sem(mod1, data = dat, estimator = 'MLR')
+summary(fit1, fit = T, stand = T, rsq = T)
+```
+
+
+
+
