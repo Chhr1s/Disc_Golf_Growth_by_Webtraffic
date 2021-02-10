@@ -288,7 +288,7 @@ dat_long %>%
   ggplot(aes(y = reorder(Region, mean),
              x = mean,
              )) + 
-  geom_errorbar(aes(xmin = mean-se, xmax = mean + se, color = mean), show.legend = F) +
+  geom_errorbar(aes(xmin = mean-1.96se, xmax = mean + 1.96se, color = mean), show.legend = F) +
   geom_point(aes(color = mean), show.legend = F) + 
   geom_vline(aes(xintercept = mean(mean))) +
   labs(title = 'Figure 6. Relative Search Interest in Disc Golf by State', 
